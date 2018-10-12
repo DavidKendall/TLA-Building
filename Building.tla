@@ -41,6 +41,7 @@ Leave(p, b) ==
   /\ location[p] = b
   /\ location' = [location EXCEPT ![p] = OUTSIDE]
   /\ UNCHANGED <<register, permission>>
+  
 ----
 
 Next == \E p \in PERSON, b \in BUILDING : 
@@ -48,34 +49,7 @@ Next == \E p \in PERSON, b \in BUILDING :
           \/ Enter(p, b)
           \/ Leave(p, b)
 
-Spec == Init /\ [][Next]_<<register, permission, location>>
-
-----
-MustBeRegisteredToHaveLocation ==
-  /\ \A p \in PERSON \ register : p \notin DOMAIN location
-  
-MustBeRegisteredToHavePermission ==
-  /\ \A p \in PERSON \ register : p \notin DOMAIN permission
-  
-MustHavePermissionWhenInBuilding ==
-  /\ \A p \in register : \/ location[p] \in permission[p]
-                         \/ location[p] = OUTSIDE
-                         
-GeneralPermission ==
-  /\ \A p \in PERSON, b \in BUILDING :
-       \/ /\ p \in DOMAIN location 
-          /\ location[p] = b => b \in permission[p] 
-       \/ p \notin DOMAIN location
-       
-AlternativePermission ==
-  /\ \A p \in PERSON :
-       \/ /\ p \in register
-          /\ \/ location[p] \in permission[p]
-             \/ location[p] = OUTSIDE
-       \/ /\ p \notin register
-          /\ p \notin DOMAIN location
-          /\ p \notin DOMAIN permission 
 =============================================================================
 \* Modification History
-\* Last modified Fri Oct 12 09:32:05 BST 2018 by cgdk2
+\* Last modified Fri Oct 12 09:39:31 BST 2018 by cgdk2
 \* Created Mon Jun 04 15:17:18 BST 2018 by cgdk2
